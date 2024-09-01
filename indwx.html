@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Virtual Computer</title>
+    <style>
+        body {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .computer {
+            width: 600px;
+            height: 400px;
+            background-color: #444;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .screen {
+            width: 90%;
+            height: 70%;
+            background-color: #222;
+            border-radius: 10px;
+            margin: 20px auto;
+            padding: 10px;
+            color: #0f0;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .keyboard {
+            width: 80%;
+            height: 15%;
+            background-color: #333;
+            margin: 20px auto;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .key {
+            width: 50px;
+            height: 30px;
+            background-color: #555;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .power-button {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #f00;
+            border-radius: 50%;
+            top: 10px;
+            right: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="computer">
+        <div class="screen" id="screen">
+            <p id="screen-content">Press the Power Button to Start</p>
+        </div>
+        <div class="keyboard">
+            <div class="key" onclick="typeKey('A')">A</div>
+            <div class="key" onclick="typeKey('B')">B</div>
+            <div class="key" onclick="typeKey('C')">C</div>
+            <!-- Add more keys as needed -->
+        </div>
+        <div class="power-button" id="power-button">⏻</div>
+    </div>
+
+    <script>
+        let isOn = false;
+
+        document.getElementById('power-button').addEventListener('click', function() {
+            const screen = document.getElementById('screen');
+            const screenContent = document.getElementById('screen-content');
+
+            if (isOn) {
+                screen.style.backgroundColor = '#222';
+                screenContent.textContent = 'Press the Power Button to Start';
+                screenContent.style.color = '#0f0';
+            } else {
+                screen.style.backgroundColor = '#fff';
+                screenContent.textContent = 'Welcome to the Virtual Computer!';
+                screenContent.style.color = '#000';
+            }
+            isOn = !isOn;
+        });
+
+        function typeKey(key) {
+            if (isOn) {
+                const screenContent = document.getElementById('screen-content');
+                screenContent.textContent += key;
+            }
+        }
+    </script>
+</body>
+</html>
