@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Virtual Computer</title>
+    <title>Barbie Virtual Computer</title>
     <style>
         body {
-            background-color: #333;
+            background-color: #f7d6e0; /* Light pink background */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful font */
         }
 
         .computer {
             width: 600px;
-            height: 400px;
-            background-color: #444;
+            height: 500px;
+            background-color: #ffccff; /* Light pink computer body */
             border-radius: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             position: relative;
@@ -26,50 +26,62 @@
 
         .screen {
             width: 90%;
-            height: 70%;
-            background-color: #222;
+            height: 60%;
             border-radius: 10px;
             margin: 20px auto;
             padding: 10px;
-            color: #0f0;
+            color: #ff69b4; /* Hot pink text color */
             overflow: hidden;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            font-size: 18px;
+            font-size: 20px; /* Slightly larger text */
+            position: relative;
+            background: url('https://www.example.com/grass-texture.jpg') no-repeat center center;
+            background-size: cover; /* Ensure the grass image covers the screen */
         }
 
         .keyboard {
-            width: 80%;
+            width: 90%;
             height: 15%;
-            background-color: #333;
-            margin: 20px auto;
+            background-color: #f4c2c2; /* Light pink keyboard */
+            margin: 0 auto 20px;
             border-radius: 10px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-around;
-            align-items: center;
             padding: 10px;
         }
 
         .key {
-            width: 50px;
-            height: 30px;
-            background-color: #555;
+            width: 150px;
+            height: 50px;
+            background-color: #ffb6c1; /* Light pink keys */
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             text-align: center;
-            line-height: 30px;
+            line-height: 50px;
             color: #fff;
             cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .key.wide {
+            width: 100px;
+        }
+
+        .key.space {
+            width: 250px;
         }
 
         .power-button {
             position: absolute;
             width: 40px;
             height: 40px;
-            background-color: #f00;
+            background-color: #ff69b4; /* Hot pink power button */
             border-radius: 50%;
             top: 10px;
             right: 10px;
@@ -81,47 +93,144 @@
             color: #fff;
             font-size: 20px;
         }
+
+        .instructions {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff0f5; /* Lavender blush instructions background */
+            color: #ff69b4; /* Hot pink text */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            font-size: 16px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="computer">
         <div class="screen" id="screen">
-            <p id="screen-content">Press the Power Button to Start</p>
+            <p id="screen-content"></p>
         </div>
         <div class="keyboard">
-            <div class="key" onclick="typeKey('A')">A</div>
-            <div class="key" onclick="typeKey('B')">B</div>
-            <div class="key" onclick="typeKey('C')">C</div>
-            <!-- Add more keys as needed -->
+            <div class="key" id="yes-button">Yes I Do! 😊</div>
+            <div class="key" id="no-button">No I Never Will 😔</div>
         </div>
         <div class="power-button" id="power-button">⏻</div>
+        <div class="instructions" id="instructions">Click the power button to start!</div>
     </div>
 
     <script>
         let isOn = false;
+        let responseDisplayed = false;
 
         document.getElementById('power-button').addEventListener('click', function() {
-            const screen = document.getElementById('screen');
-            const screenContent = document.getElementById('screen-content');
-
             if (isOn) {
-                screen.style.backgroundColor = '#222';
-                screenContent.textContent = 'Press the Power Button to Start';
-                screenContent.style.color = '#0f0';
+                powerOff();
             } else {
-                screen.style.backgroundColor = '#fff';
-                screenContent.textContent = 'Welcome to the Virtual Computer!';
-                screenContent.style.color = '#000';
+                startComputer();
             }
             isOn = !isOn;
         });
 
-        function typeKey(key) {
-            if (isOn) {
-                const screenContent = document.getElementById('screen-content');
-                screenContent.textContent += key;
+        function startComputer() {
+            const screenContent = document.getElementById('screen-content');
+            screenContent.textContent = ''; // Clear any previous content
+            typeMessage("Do You Love Me?");
+            responseDisplayed = false; // Allow responses after powering on
+            showInstructions(false); // Hide instructions when powered on
+        }
+
+        function powerOff() {
+            const screenContent = document.getElementById('screen-content');
+            screenContent.textContent = ''; // Clear the screen when powered off
+            responseDisplayed = false; // Reset response status
+            showInstructions(true); // Show instructions when powered off
+        }
+
+        function typeMessage(message) {
+            const screenContent = document.getElementById('screen-content');
+            const words = message.split(" ");
+            let index = 0;
+
+            function typeNextWord() {
+                if (index < words.length) {
+                    screenContent.textContent += words[index] + " ";
+                    index++;
+                    setTimeout(typeNextWord, 150); // Faster 0.15-second delay between words
+                }
             }
+
+            typeNextWord();
+        }
+
+        function showErrorMessage() {
+            const screenContent = document.getElementById('screen-content');
+            screenContent.textContent = "Too Bad, You can't change this now.";
+        }
+
+        document.getElementById('yes-button').addEventListener('click', function() {
+            if (isOn) {
+                if (!responseDisplayed) {
+                    displayResponse("Wonderful! 😊");
+                    responseDisplayed = true;
+                } else {
+                    showErrorMessage();
+                }
+            }
+        });
+
+        document.getElementById('no-button').addEventListener('click', function() {
+            if (isOn) {
+                if (!responseDisplayed) {
+                    displayResponse("I see. 😔");
+                    responseDisplayed = true;
+                } else {
+                    showErrorMessage();
+                }
+            }
+        });
+
+        function displayResponse(responseText) {
+            const screenContent = document.getElementById('screen-content');
+            screenContent.textContent = responseText;
+        }
+
+        function showInstructions(visible) {
+            const instructions = document.getElementById('instructions');
+            if (visible) {
+                instructions.style.display = 'block'; // Show instructions
+                instructions.style.opacity = '1'; // Ensure instructions are visible
+                instructions.style.animation = 'fadeIn 2s forwards'; // Add fade-in animation
+            } else {
+                instructions.style.opacity = '0'; // Hide instructions with fade-out effect
+                instructions.style.animation = 'none'; // Remove animation
+                setTimeout(() => instructions.style.display = 'none', 2000); // Hide after animation
+            }
+        }
+
+        // Show instructions on page load
+        window.onload = function() {
+            showInstructions(true); // Show instructions on page load
         }
     </script>
 </body>
 </html>
+
